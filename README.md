@@ -10,5 +10,5 @@ var dcss1 = new Dcss.animationBuilder('Area1', {
         count: 3
 }).frame('0%', 'height:100px;background:#00f').frame('50%', 'height:200px;background:#f00').begin();
 ```
-
+> Run the demo for more detail.
 
