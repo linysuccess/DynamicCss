@@ -8,7 +8,7 @@ var dcss1 = new Dcss.animationBuilder('Area1', {
         duration: '2s',
         effect: 'linear',
         count: 3
-    }).frame('0%', 'height:100px;background:#00f').frame('50%', 'height:200px;background:#f00').begin();
+}).frame('0%', 'height:100px;background:#00f').frame('50%', 'height:200px;background:#f00').begin();
 ```
 
 
