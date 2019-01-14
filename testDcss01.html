@@ -15,10 +15,31 @@
             background: #fff;
             padding: 20px;
         }
-        .area {
-            width: 100%;
+        #Area1 {
+            width: 200px;
             height: 100px;
             background: #f5f5f5;
+        }
+        .span-area {
+            background: #f0f0f0;
+            text-align: center;
+            margin: 10px 0 20px;
+        }
+        .span-area>span {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin: 5px;
+            color: #fff;
+        }
+        .circle {
+            position: relative;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #9c1012;
+            margin: 10px;
         }
     </style>
 </head>
@@ -26,15 +47,43 @@
 <div class="area" id="Area1">
 
 </div>
+<div class="span-area">
+    <span id="Span1">1</span>
+    <span id="Span2">2</span>
+    <span id="Span3">3</span>
+</div>
+<div>
+    <div class="circle" id="Circle1"></div>
+</div>
 
 </body>
 <script src="js/Dcss.js"></script>
 <script>
-    var dcss1 = new Dcss.animationBuilder('Area1', {
+    //add css styles with Dcss.addRuleItem
+    Dcss.addRuleItem('#Span1', 'background:#f00');
+    Dcss.addRuleItem('#Span2', 'background:#0f0');
+    Dcss.addRuleItem('#Span3', 'background:#00f');
+
+    //css animation
+    var dcssAni = new Dcss.animationBuilder('Area1', {
         duration: '2s',
         effect: 'linear',
         count: 3
-    }).frame('0%', 'height:100px;background:#00f').frame('50%', 'height:200px;background:#f00').begin();
+    }).frame('0%', 'width:200px;background:#f5f5f5').frame('50%', 'width:300px;background:#f00').begin();
+
+    //css transition
+    var dcssTranz = new Dcss.transitionBuilder('Circle1', {
+        duration: '3s',
+        effect: 'ease',
+        delay: '1s',
+        onend: function() {
+            console.log('transition end...');
+            dcssTranz.reset();
+        }
+    }).props({
+        'left': '40%',
+        'background': '#3f9f00'
+    }).begin();
 
 
 </script>

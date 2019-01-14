@@ -72,9 +72,9 @@ Dcss.transitionBuilder = function(theId, configs) {
     var onend = configs.onend || false;
     var next = configs.next || false;
     var endHandler = function(){
+        state = 3;
         onend && onend();
         next && next.begin();
-        state = 3;
     };
     var oldAttr = {};
     var props;
