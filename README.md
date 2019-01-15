@@ -1,5 +1,5 @@
-# Dcss
-> Dynamic Css
+# Dcss - Dynamic Css
+
 > Use Css/Css-Animation/Css-Transition via JavaScript
 
 1. Add css styles dynamically with JavaScript.
@@ -28,7 +28,6 @@ var dcssTranz = new Dcss.transitionBuilder('Circle1', {
     delay: '1s',
     onend: function() {
         console.log('transition end...');
-        dcssTranz.reset();
     }
 }).props({
     'left': '40%',
@@ -38,11 +37,12 @@ var dcssTranz = new Dcss.transitionBuilder('Circle1', {
 ```
 
 3. Several basic animations
+
 ```js
-Dcss.rotate
-Dcss.hoverRotate
-Dcss.scale
-Dcss.hoverSotate
+Dcss.rotate(...)
+Dcss.hoverRotate(...)
+Dcss.scale(...)
+Dcss.hoverSotate(...)
 ```
 
 > Run the demo for more details.
