@@ -71,17 +71,22 @@ Dcss.transitionBuilder = function(theId, configs) {
     var state = 1;
     var onend = configs.onend || false;
     var next = configs.next || false;
-    var endHandler = function(){
-        state = 3;
-        onend && onend();
-        next && next.begin();
-    };
     var oldAttr = {};
     var props;
     var cssArr = ['all'];
+    var transitionFlag = true;
     cssArr.push(configs.duration || '1s');
     cssArr.push(configs.effect || 'ease');
+
     cssArr.push(configs.delay || '0s');
+    var endHandler = function(e) {
+        if(e.target === this && transitionFlag) {
+            transitionFlag = false;
+            onend && onend();
+            next && next.begin();
+            state = 3;
+        }
+    };
 
     this.props = function(theProps) {
         props = theProps;
@@ -90,24 +95,22 @@ Dcss.transitionBuilder = function(theId, configs) {
     this.begin = function() {
         if(state!=1)return;
         state = 2;
-        props['transition'] = cssArr.join(" ");
+        node.style['transition'] = cssArr.join(" ");
+        node.addEventListener('transitionend', endHandler);
         for(var key in props) {
             oldAttr[key] = node.style[key];
             node.style[key] = props[key];
         }
-        Dcss.once(node, 'transitionend', endHandler);
         return this;
     }
     this.reset = function() {
-        if(state!=3)return this;
+        if(state==1)return this;
         state = 1;
         for(var key in oldAttr) {
             node.style[key] = oldAttr[key];
         }
-        oldAttr = {};
         return this;
     }
-
 }
 Dcss.animationBuilder = function(theId, configs) {
     var node = document.getElementById(theId);
@@ -159,7 +162,7 @@ Dcss.animationBuilder = function(theId, configs) {
         return this;
     }
     this.reset = function() {
-        if(state!=3)return this;
+        if(state==1)return this;
         state = 1;
         Dcss.removeClass(node, aniClsName);
         Dcss.delRuleItem("@keyframes " + aniName);
@@ -169,4 +172,46 @@ Dcss.animationBuilder = function(theId, configs) {
         node.removeEventListener('animationend', endHandler);
         return this;
     }
+}
+Dcss.rotate = function(theId,degrees,timeMillis,callback) {
+    var dcssTranz = new Dcss.transitionBuilder(theId, {
+        duration: timeMillis + 'ms',
+        onend: function() {
+            callback && callback();
+        }
+    }).props({transform:'rotate('+degrees+'deg)'}).begin();
+}
+Dcss.hoverRotate = function(theId,degrees,timeMillis,callback) {
+    var dcssTranz = new Dcss.transitionBuilder(theId, {
+        duration: timeMillis + 'ms',
+        onend: function() {
+            callback && callback();
+        }
+    }).props({transform:'rotate('+degrees+'deg)'});
+    var node = document.getElementById(theId);
+    node.addEventListener('mouseenter', function() {
+        dcssTranz.begin();
+    });
+    node.addEventListener('mouseleave', function() {
+        dcssTranz.reset();
+    });
+}
+Dcss.scale = function(theId,timeMillis,x,y) {
+    var sy = y===undefined ? x : y;
+    var dcssTranz = new Dcss.transitionBuilder(theId, {
+        duration: timeMillis + 'ms'
+    }).props({transform:'scale('+x+','+sy+')'}).begin();
+}
+Dcss.hoverScale = function(theId,timeMillis,x,y) {
+    var sy = y===undefined ? x : y;
+    var dcssTranz = new Dcss.transitionBuilder(theId, {
+        duration: timeMillis + 'ms'
+    }).props({transform:'scale('+x+','+sy+')'});
+    var node = document.getElementById(theId);
+    node.addEventListener('mouseenter', function() {
+        dcssTranz.begin();
+    });
+    node.addEventListener('mouseleave', function() {
+        dcssTranz.reset();
+    });
 }
